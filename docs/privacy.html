@@ -12,10 +12,10 @@
 <a class="back" href="index.html">← Back to Legal</a>
 
 <h1>Privacy Policy</h1>
-<span class="updated">Effective date: 13 February 2025 · Last updated: 13 February 2025 · Version 1.0</span>
+<span class="updated">Effective date: 13 February 2025 · Last updated: 23 July 2026 · Version 1.1</span>
 
 <div class="callout">
-  <strong>Summary:</strong> Sol Clock stores all data locally on your device. We do not operate servers, collect personal information, or track your behaviour. The only network requests are read-only API calls to fetch publicly available price and blockchain data.
+  <strong>Summary:</strong> Sol Clock stores all personal data locally on your device. We do not collect personal information or track your behaviour. The only network requests are read-only API calls to fetch publicly available price and blockchain data, plus <strong>anonymous, aggregate usage counters</strong> (e.g. "the app was opened") that contain no identifiers of any kind and cannot be linked to you or your device — see Section 3. You can verify everything we hold at our <a href="https://sol-clock-analytics.aardappvark.workers.dev/public-stats" rel="noopener noreferrer">public transparency endpoint</a>.
 </div>
 
 <h2>1. Data Controller</h2>
@@ -29,7 +29,7 @@
 <p>For the purposes of the EU General Data Protection Regulation (GDPR) and UK General Data Protection Regulation (UK GDPR), the data controller is the developer identified above. If you are located in the European Economic Area (EEA) or United Kingdom and have questions about data protection, please contact us at the email address above.</p>
 
 <h2>2. What Data Sol Clock Collects</h2>
-<p>Sol Clock is designed with a <strong>privacy-first, local-only architecture</strong>. All data remains exclusively on your device in app-private storage (Android SharedPreferences and EncryptedSharedPreferences). No data is transmitted to any server we operate, because we do not operate any servers.</p>
+<p>Sol Clock is designed with a <strong>privacy-first, local-only architecture</strong>. All personal data remains exclusively on your device in app-private storage (Android SharedPreferences and EncryptedSharedPreferences). The only server-side system we operate is an anonymous, aggregate usage counter that is incapable of receiving, storing, or processing personal data — it is described in full in Section 3.</p>
 
 <h3>2.1 Data stored locally on your device</h3>
 <table>
@@ -59,15 +59,26 @@
   <li>Private keys, seed phrases, wallet credentials, or passwords</li>
   <li>Device identifiers, Android Advertising ID, or hardware serial numbers</li>
   <li>Precise GPS location data</li>
-  <li>Usage analytics, behavioural tracking, or session data</li>
+  <li>Identifiable usage analytics, behavioural tracking, or session data — the only usage measurement is the anonymous, aggregate event counting described in Section 3, which contains no identifiers and cannot be linked to you or your device</li>
   <li>Cookies, browser history, or web tracking data</li>
   <li>Biometric data</li>
   <li>Health, financial (beyond read-only public blockchain balance), or demographic data</li>
   <li>Contact lists, call logs, SMS, camera, or microphone data</li>
 </ul>
 
-<h2>3. No Server-Side Data Storage</h2>
-<p>Sol Clock does <strong>not</strong> operate any backend servers, databases, cloud storage, or analytics infrastructure. We have no server-side systems capable of receiving, storing, or processing user data. All data exists exclusively in your device's app-private storage and is inaccessible to other applications.</p>
+<h2>3. Server-Side Systems: Anonymous Aggregate Analytics Only</h2>
+<p>Sol Clock does <strong>not</strong> operate any backend servers, databases, or cloud storage that hold personal data. All personal data exists exclusively in your device's app-private storage and is inaccessible to other applications.</p>
+<p>The single server-side system we operate is an <strong>anonymous, aggregate usage counter</strong> (a Cloudflare Worker). It works as follows:</p>
+<ul>
+  <li><strong>What the app sends:</strong> a single event name from a fixed list, and nothing else. The complete list of events is: app opened, wallet connected, wallet disconnected, settings opened, region-block screen shown, home-screen widget added, home-screen widget removed, and screensaver started.</li>
+  <li><strong>No identifiers:</strong> the request contains no user ID, device ID, wallet address, advertising ID, fingerprint, or any other identifier. Two events from the same device cannot be linked to each other.</li>
+  <li><strong>Approximate geography:</strong> Cloudflare's edge network derives the country and city associated with the request's IP address. Our code reads only that derived country/city — the IP address itself is <strong>never logged, stored, or processed</strong> by our code, and your device's location services are not involved.</li>
+  <li><strong>What is stored:</strong> only aggregate counts of the form "event × country × city × day" (e.g. "app_open, HU, Budapest, 2026-07-23: 41"). Nothing per-user or per-device exists anywhere in the system.</li>
+  <li><strong>Why:</strong> to understand real-world usage of Sol Clock (which features matter, where users are) and to report honest, verifiable numbers publicly.</li>
+  <li><strong>Transparency:</strong> the complete dataset we hold is publicly viewable, in aggregate, at <a href="https://sol-clock-analytics.aardappvark.workers.dev/public-stats" rel="noopener noreferrer">sol-clock-analytics.aardappvark.workers.dev/public-stats</a>. What you see there is everything that exists.</li>
+</ul>
+<p><strong>Legal basis (GDPR):</strong> the stored aggregate counts are anonymous information within the meaning of GDPR Recital 26 and therefore fall outside the scope of the GDPR. The momentary processing of your IP address by Cloudflare's edge to derive a country/city (before immediate discard) is based on legitimate interest (Art. 6(1)(f)); we have conducted a balancing test and concluded that counting anonymous events, with the IP never stored and no identifiers ever collected, presents minimal privacy intrusion.</p>
+<p><strong>Retention:</strong> aggregate counters are retained indefinitely. They contain no personal data and cannot be traced back to any person or device.</p>
 
 <h2>4. Third-Party API Calls</h2>
 <p>Sol Clock makes <strong>read-only</strong> API requests to the following third-party services to retrieve publicly available data. These requests are HTTPS-encrypted and no user-specific data is included in the requests except where noted:</p>
@@ -78,6 +89,7 @@
   <tr><td>Raydium API</td><td>api-v3.raydium.io</td><td>SOL and SKR token prices (fallback)</td><td>None</td></tr>
   <tr><td>CoinGecko API</td><td>api.coingecko.com</td><td>Prices and 24-hour change data (fallback)</td><td>None</td></tr>
   <tr><td>Solana RPC</td><td>api.mainnet-beta.solana.com</td><td>Blockchain slot height; wallet SOL balance</td><td>Wallet public address*</td></tr>
+  <tr><td>Sol Clock analytics (operated by us on Cloudflare)</td><td>sol-clock-analytics.aardappvark.workers.dev</td><td>Nothing (write-only counter)</td><td>Anonymous event name only (see Section 3)</td></tr>
 </table>
 
 <p>* Your Solana wallet public address is sent to the Solana RPC endpoint <strong>only when you have opted in</strong> by signing in with your wallet. Wallet public addresses are publicly visible on the Solana blockchain and are not generally considered personal information, though GDPR may classify pseudonymous identifiers as personal data. The legal basis for this processing is your explicit consent (Art. 6(1)(a) GDPR).</p>
@@ -89,11 +101,12 @@
 <h2>5. Mobile Wallet Adapter (MWA)</h2>
 <p>Wallet sign-in uses Solana's Mobile Wallet Adapter protocol, which operates <strong>entirely locally</strong> between Sol Clock and your wallet app on the same device via Android inter-process communication. During the MWA sign-in process:</p>
 <ul>
-  <li>No data leaves your device</li>
+  <li>No data leaves your device during the sign-in itself</li>
   <li>Your private keys remain exclusively within your wallet app</li>
   <li>Sol Clock receives only your wallet's public address and wallet name</li>
   <li>The sign-in can be revoked at any time by disconnecting in Settings</li>
 </ul>
+<p>After a successful sign-in (or a disconnect), Sol Clock increments the anonymous "wallet connected" (or "wallet disconnected") counter described in Section 3. The event contains no wallet address, wallet name, or any other data — it is a bare count.</p>
 
 <h2>6. Data Security</h2>
 <p>We implement the following security measures to protect locally stored data:</p>
@@ -111,10 +124,10 @@
   <li><strong>Clearing app data:</strong> Android Settings → Apps → Sol Clock → Storage → Clear Data (clears all preferences)</li>
   <li><strong>Uninstalling the app:</strong> Removes all Sol Clock data from your device</li>
 </ul>
-<p>Since no data is stored on our servers, deletion from your device constitutes complete deletion.</p>
+<p>Since no personal data is stored on our servers, deletion from your device constitutes complete deletion of your personal data. The server-side aggregate counters described in Section 3 contain no personal data and cannot be linked to you, your device, or your wallet — there is nothing identifiable to delete.</p>
 
 <h2>8. International Data Transfers</h2>
-<p>Sol Clock does not transfer personal data to our servers (we have none). However, when Sol Clock makes API calls to third-party services (see Section 4), network requests may be routed through servers located outside your country of residence, including servers in the United States.</p>
+<p>Sol Clock does not transfer personal data to our servers. However, when Sol Clock makes API calls to third-party services (see Section 4), network requests may be routed through servers located outside your country of residence, including servers in the United States. The anonymous event counters described in Section 3 are received by Cloudflare's globally distributed edge network and stored, as anonymous aggregates only, in a Cloudflare D1 database; because they contain no personal data, data-transfer restrictions do not apply to them.</p>
 <p>For users in the EEA or UK: these API calls are limited to fetching publicly available price data and, where you have consented, querying your wallet's public balance. We rely on the derogation under Article 49(1)(a) GDPR (explicit consent for wallet balance queries) and Article 49(1)(c) (necessary for the performance of the contract for price data retrieval).</p>
 
 <h2>9. Your Rights</h2>
@@ -180,10 +193,11 @@
   <li>We do not systematically monitor public areas</li>
   <li>We do not process special categories of data</li>
   <li>Location data is processed on-device only and never stored or transmitted</li>
+  <li>Usage measurement is limited to anonymous, aggregate event counts with no identifiers (Section 3)</li>
 </ul>
 
 <h2>13. Do Not Track</h2>
-<p>Sol Clock does not track users in any way and therefore inherently honours Do Not Track (DNT) signals. There is no tracking to disable.</p>
+<p>Sol Clock does not track users. The anonymous event counters described in Section 3 contain no identifiers, cannot distinguish one user from another, and cannot follow anyone across apps, sites, or sessions — so Do Not Track (DNT) signals are inherently honoured. There is no user-level tracking to disable.</p>
 
 <h2>14. Local Storage Disclosure (ePrivacy)</h2>
 <p>For the purposes of the EU ePrivacy Directive (2002/58/EC) and its national implementations: Sol Clock stores configuration data on your device using Android SharedPreferences and EncryptedSharedPreferences. This storage is <strong>strictly necessary</strong> for the functioning of the application (exempted from consent requirements under Art. 5(3)) and does not involve any tracking, profiling, or advertising functionality.</p>
