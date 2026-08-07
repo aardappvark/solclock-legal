@@ -12,7 +12,7 @@
 <a class="back" href="index.html">← Back to Legal</a>
 
 <h1>Sanctions &amp; Restricted Regions Policy</h1>
-<span class="updated">Effective date: 13 February 2025 · Last updated: 23 July 2026 · Version 1.1</span>
+<span class="updated">Effective date: 13 February 2025 · Last updated: 7 August 2026 · Version 1.2</span>
 
 <div class="callout">
   <strong>Compliance commitment:</strong> Sol Clock is committed to complying with all applicable international sanctions laws and regulations. This policy describes how we implement geographic restrictions to meet our legal obligations.
@@ -32,24 +32,33 @@
 <p>Although Sol Clock does not facilitate financial transactions, custody digital assets, or provide financial services, we recognise that displaying cryptocurrency market data may be subject to restrictions in certain jurisdictions under applicable sanctions regimes. We implement geographic restrictions as a precautionary compliance measure.</p>
 
 <h2>2. Restricted Jurisdictions</h2>
-<p>Sol Clock is not available in the following jurisdictions due to comprehensive international sanctions. This list reflects jurisdictions subject to broad sanctions programmes as of the effective date of this policy:</p>
+<p>Sol Clock is not available in the following jurisdictions. This list enumerates exactly the countries screened by the App's built-in region check (20 countries), based on comprehensive and targeted sanctions programmes as of the last-updated date of this policy:</p>
 
 <table>
   <tr><th>Jurisdiction</th><th>ISO code</th><th>Sanctions basis</th></tr>
-  <tr><td>North Korea</td><td>KP</td><td>OFAC, EU, UK, AU, UN</td></tr>
-  <tr><td>Iran</td><td>IR</td><td>OFAC, EU, UK, AU</td></tr>
-  <tr><td>Syria</td><td>SY</td><td>OFAC, EU, UK, AU</td></tr>
   <tr><td>Cuba</td><td>CU</td><td>OFAC</td></tr>
-  <tr><td>Crimea region (Ukraine)</td><td>—</td><td>OFAC, EU, UK, AU</td></tr>
-  <tr><td>Donetsk People's Republic (Ukraine)</td><td>—</td><td>OFAC, EU, UK, AU</td></tr>
-  <tr><td>Luhansk People's Republic (Ukraine)</td><td>—</td><td>OFAC, EU, UK, AU</td></tr>
+  <tr><td>Iran</td><td>IR</td><td>OFAC, EU, UK, AU</td></tr>
+  <tr><td>North Korea</td><td>KP</td><td>OFAC, EU, UK, AU, UN</td></tr>
+  <tr><td>Syria</td><td>SY</td><td>OFAC, EU, UK, AU</td></tr>
   <tr><td>Russia</td><td>RU</td><td>OFAC (sectoral), EU, UK, AU</td></tr>
+  <tr><td>Afghanistan</td><td>AF</td><td>OFAC (Taliban), EU, UK, AU, UN</td></tr>
   <tr><td>Belarus</td><td>BY</td><td>EU, UK, AU</td></tr>
   <tr><td>Myanmar (Burma)</td><td>MM</td><td>OFAC, EU, UK, AU</td></tr>
+  <tr><td>Venezuela</td><td>VE</td><td>OFAC (Maduro regime)</td></tr>
+  <tr><td>Zimbabwe</td><td>ZW</td><td>OFAC (targeted), EU, UK, AU</td></tr>
+  <tr><td>Sudan</td><td>SD</td><td>OFAC, UN</td></tr>
   <tr><td>South Sudan</td><td>SS</td><td>OFAC, EU, UK, AU, UN</td></tr>
-  <tr><td>Sudan</td><td>SD</td><td>OFAC</td></tr>
-  <tr><td>Afghanistan</td><td>AF</td><td>OFAC (Taliban), EU, UK, AU, UN</td></tr>
+  <tr><td>Somalia</td><td>SO</td><td>UN, OFAC, EU, UK</td></tr>
+  <tr><td>Yemen</td><td>YE</td><td>UN, OFAC (Houthi-related)</td></tr>
+  <tr><td>Libya</td><td>LY</td><td>UN, OFAC, EU, UK</td></tr>
+  <tr><td>Democratic Republic of the Congo</td><td>CD</td><td>UN, OFAC, EU, UK</td></tr>
+  <tr><td>Central African Republic</td><td>CF</td><td>UN, OFAC, EU</td></tr>
+  <tr><td>Lebanon</td><td>LB</td><td>OFAC (Hezbollah-related)</td></tr>
+  <tr><td>Mali</td><td>ML</td><td>UN, EU</td></tr>
+  <tr><td>Haiti</td><td>HT</td><td>UN, OFAC</td></tr>
 </table>
+
+<p><strong>Occupied Ukrainian territories:</strong> The Crimea region of Ukraine is subject to comprehensive sanctions (OFAC, EU, UK, AU); devices there typically use the Russian timezone <code>Europe/Simferopol</code>, which the App's screening treats as Russia (RU) and blocks. The so-called Donetsk and Luhansk People's Republics are likewise comprehensively sanctioned, but devices there generally report Ukrainian carrier and timezone signals that on-device screening cannot reliably distinguish from the rest of Ukraine. Use of Sol Clock from any of these territories remains prohibited under the user representations in Section 4, even where the automated screening cannot detect it.</p>
 
 <div class="callout callout-green">
   <strong>Note:</strong> This list is maintained based on publicly available sanctions programme information and may be updated without prior notice as sanctions designations change. We review and update this list periodically to reflect current international sanctions.
@@ -62,18 +71,16 @@
   <tr><th>Priority</th><th>Method</th><th>Data source</th><th>Reliability</th></tr>
   <tr><td>1</td><td>SIM card country code</td><td>TelephonyManager (SIM operator)</td><td>Highest — physical SIM is issued in a specific country</td></tr>
   <tr><td>2</td><td>Network carrier country</td><td>TelephonyManager (network operator)</td><td>High — carrier-reported country code</td></tr>
-  <tr><td>3</td><td>Geocoder reverse lookup</td><td>Android Geocoder (coarse location)</td><td>High — network-based location resolution</td></tr>
-  <tr><td>4</td><td>Device locale setting</td><td>Android system locale</td><td>Moderate — user-configurable but indicative</td></tr>
-  <tr><td>5</td><td>Timezone analysis</td><td>Android timezone setting</td><td>Low — used only as supplementary signal</td></tr>
+  <tr><td>3</td><td>Timezone analysis</td><td>Android timezone setting</td><td>Low — fallback only, used when no SIM or network country is available</td></tr>
 </table>
+<p>Sol Clock does <strong>not</strong> request an Android location permission and does not use location services or the Geocoder for this check. The device locale is deliberately <strong>not</strong> used as a blocking signal, because it reflects a chosen UI language rather than physical presence.</p>
 
 <h3>3.1 Privacy-preserving design</h3>
 <ul>
-  <li>All screening is performed <strong>entirely on-device</strong> — no location data is transmitted to any server</li>
-  <li>Coarse location (when available) is used only for Geocoder reverse lookup and is <strong>immediately discarded</strong> after obtaining the country code</li>
-  <li>No location history is stored, logged, or recorded</li>
-  <li>The location permission can be denied — the app falls back to SIM/carrier/locale/timezone methods</li>
-  <li>See our <a href="privacy.html">Privacy Policy</a> for full details on location data handling</li>
+  <li>All screening is performed <strong>entirely on-device</strong> — nothing is transmitted to any server</li>
+  <li>No location permission is requested, and Android location services and the Geocoder are never used</li>
+  <li>The country code obtained is evaluated immediately and <strong>discarded</strong>; no location or region history is stored, logged, or recorded</li>
+  <li>See our <a href="privacy.html">Privacy Policy</a> for full details</li>
 </ul>
 
 <h3>3.2 What happens when a restricted region is detected</h3>
@@ -89,7 +96,7 @@
 <p>We acknowledge that on-device geographic screening has inherent limitations:</p>
 <ul>
   <li>SIM-based detection may not reflect the user's current physical location (e.g., travelling with a foreign SIM)</li>
-  <li>Location services depend on device-reported data, which may be inaccurate</li>
+  <li>Carrier and timezone signals are device-reported and may be inaccurate or user-altered</li>
   <li>VPNs or location spoofing tools may circumvent geographic restrictions</li>
   <li>Dual-SIM devices may report ambiguous country information</li>
 </ul>

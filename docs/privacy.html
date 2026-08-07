@@ -12,7 +12,7 @@
 <a class="back" href="index.html">← Back to Legal</a>
 
 <h1>Privacy Policy</h1>
-<span class="updated">Effective date: 13 February 2025 · Last updated: 23 July 2026 · Version 1.1</span>
+<span class="updated">Effective date: 13 February 2025 · Last updated: 7 August 2026 · Version 1.2</span>
 
 <div class="callout">
   <strong>Summary:</strong> Sol Clock stores all personal data locally on your device. We do not collect personal information or track your behaviour. The only network requests are read-only API calls to fetch publicly available price and blockchain data, plus <strong>anonymous, aggregate usage counters</strong> (e.g. "the app was opened") that contain no identifiers of any kind and cannot be linked to you or your device — see Section 3. You can verify everything we hold at our <a href="https://sol-clock-analytics.aardappvark.workers.dev/public-stats" rel="noopener noreferrer">public transparency endpoint</a>.
@@ -29,7 +29,7 @@
 <p>For the purposes of the EU General Data Protection Regulation (GDPR) and UK General Data Protection Regulation (UK GDPR), the data controller is the developer identified above. If you are located in the European Economic Area (EEA) or United Kingdom and have questions about data protection, please contact us at the email address above.</p>
 
 <h2>2. What Data Sol Clock Collects</h2>
-<p>Sol Clock is designed with a <strong>privacy-first, local-only architecture</strong>. All personal data remains exclusively on your device in app-private storage (Android SharedPreferences and EncryptedSharedPreferences). The only server-side system we operate is an anonymous, aggregate usage counter that is incapable of receiving, storing, or processing personal data — it is described in full in Section 3.</p>
+<p>Sol Clock is designed with a <strong>privacy-first, local-only architecture</strong>. All personal data is stored on your device in app-private storage (Android SharedPreferences and EncryptedSharedPreferences); if Android Backup is enabled, settings and progress data are also included in your device's encrypted Google backup (see Section 7). The only server-side system we operate is an anonymous, aggregate usage counter that is incapable of receiving, storing, or processing personal data — it is described in full in Section 3.</p>
 
 <h3>2.1 Data stored locally on your device</h3>
 <table>
@@ -42,16 +42,15 @@
   <tr><td>Device timezone</td><td>Display local time and location label</td><td>Contract (Art. 6(1)(b))</td></tr>
 </table>
 
-<h3>2.2 Coarse location (ACCESS_COARSE_LOCATION)</h3>
-<p>Sol Clock requests Android coarse location permission <strong>solely for regulatory compliance</strong> — specifically to detect whether the device is located in a jurisdiction subject to international sanctions. This permission:</p>
+<h3>2.2 Region screening (no location permission)</h3>
+<p>Sol Clock screens for jurisdictions subject to international sanctions <strong>without requesting any location permission</strong>. The check runs once at app startup and reads only:</p>
 <ul>
-  <li>Is used <strong>only at app startup</strong> for sanctions screening</li>
-  <li>Returns approximate location (network-based, not GPS)</li>
-  <li>Is <strong>not stored</strong>, <strong>not logged</strong>, and <strong>not transmitted</strong> to any server</li>
-  <li>Is processed entirely on-device using Android Geocoder</li>
-  <li>Can be denied — the app will fall back to SIM card and network carrier country detection</li>
+  <li>The SIM card country code reported by the device</li>
+  <li>The mobile network country code reported by the carrier</li>
+  <li>The device timezone, used only when neither of the above is available</li>
 </ul>
-<p><strong>Legal basis (GDPR):</strong> Legitimate interest (Art. 6(1)(f)) — compliance with international sanctions law. We have conducted a balancing test and determined that the compelling legal obligation to screen for sanctioned regions outweighs the minimal privacy intrusion of a single on-device coarse location check that is never stored or transmitted.</p>
+<p>Each of these values is read on-device, evaluated immediately, and <strong>not stored</strong>, <strong>not logged</strong>, and <strong>not transmitted</strong> to any server. Sol Clock does <strong>not</strong> declare or request <code>ACCESS_COARSE_LOCATION</code> or any other location permission, and does not use Android location services or the Geocoder.</p>
+<p><strong>Legal basis (GDPR):</strong> Legitimate interest (Art. 6(1)(f)) — compliance with international sanctions law. We have conducted a balancing test and determined that the compelling legal obligation to screen for sanctioned regions outweighs the minimal privacy intrusion of a single on-device check of carrier/timezone values that are never stored or transmitted.</p>
 
 <h3>2.3 Data we do NOT collect</h3>
 <ul>
@@ -72,8 +71,8 @@
 <ul>
   <li><strong>What the app sends:</strong> a single event name from a fixed list, and nothing else. The complete list of events is: app opened, wallet connected, wallet disconnected, settings opened, region-block screen shown, home-screen widget added, home-screen widget removed, and screensaver started.</li>
   <li><strong>No identifiers:</strong> the request contains no user ID, device ID, wallet address, advertising ID, fingerprint, or any other identifier. Two events from the same device cannot be linked to each other.</li>
-  <li><strong>Approximate geography:</strong> Cloudflare's edge network derives the country and city associated with the request's IP address. Our code reads only that derived country/city — the IP address itself is <strong>never logged, stored, or processed</strong> by our code, and your device's location services are not involved.</li>
-  <li><strong>What is stored:</strong> only aggregate counts of the form "event × country × city × day" (e.g. "app_open, HU, Budapest, 2026-07-23: 41"). Nothing per-user or per-device exists anywhere in the system.</li>
+  <li><strong>Approximate geography:</strong> Cloudflare's edge network derives the country, region (state/province), and city associated with the request's IP address. Our code reads only that derived country/region/city — the IP address itself is <strong>never logged, stored, or processed</strong> by our code, and your device's location services are not involved.</li>
+  <li><strong>What is stored:</strong> only aggregate counts of the form "event × country × region × city × day" (e.g. "app_open, HU, Budapest, Budapest, 2026-07-23: 41"). Nothing per-user or per-device exists anywhere in the system.</li>
   <li><strong>Why:</strong> to understand real-world usage of Sol Clock (which features matter, where users are) and to report honest, verifiable numbers publicly.</li>
   <li><strong>Transparency:</strong> the complete dataset we hold is publicly viewable, in aggregate, at <a href="https://sol-clock-analytics.aardappvark.workers.dev/public-stats" rel="noopener noreferrer">sol-clock-analytics.aardappvark.workers.dev/public-stats</a>. What you see there is everything that exists.</li>
 </ul>
@@ -93,6 +92,7 @@
 </table>
 
 <p>* Your Solana wallet public address is sent to the Solana RPC endpoint <strong>only when you have opted in</strong> by signing in with your wallet. Wallet public addresses are publicly visible on the Solana blockchain and are not generally considered personal information, though GDPR may classify pseudonymous identifiers as personal data. The legal basis for this processing is your explicit consent (Art. 6(1)(a) GDPR).</p>
+<p>To verify Seeker Genesis Token status, submit payments, and restore purchases, the App sends your wallet's public address to the Solana RPC provider api.mainnet-beta.solana.com. The provider receives your IP address and the public address. Private keys never leave your wallet.</p>
 
 <div class="callout callout-green">
   <strong>Note on IP addresses:</strong> When Sol Clock makes HTTP requests to the above APIs, your device's IP address is inherently transmitted as part of the network protocol. This is standard for all internet-connected applications. We do not control how these third-party services handle IP addresses — please refer to their respective privacy policies.
@@ -124,7 +124,8 @@
   <li><strong>Clearing app data:</strong> Android Settings → Apps → Sol Clock → Storage → Clear Data (clears all preferences)</li>
   <li><strong>Uninstalling the app:</strong> Removes all Sol Clock data from your device</li>
 </ul>
-<p>Since no personal data is stored on our servers, deletion from your device constitutes complete deletion of your personal data. The server-side aggregate counters described in Section 3 contain no personal data and cannot be linked to you, your device, or your wallet — there is nothing identifiable to delete.</p>
+<p><strong>Android Backup:</strong> If Android Backup is enabled on your device, the App's settings and progress data are included in your device's encrypted Google backup, survive uninstalling the App, and may be restored when you reinstall. Wallet data is always excluded from backup. You can exclude the App from backup in Android Settings or delete the backup from your Google account.</p>
+<p>Since no personal data is stored on our servers, deleting the App's data from your device (and, if you use Android Backup, from your Google account) constitutes complete deletion of your personal data. The server-side aggregate counters described in Section 3 contain no personal data and cannot be linked to you, your device, or your wallet — there is nothing identifiable to delete.</p>
 
 <h2>8. International Data Transfers</h2>
 <p>Sol Clock does not transfer personal data to our servers. However, when Sol Clock makes API calls to third-party services (see Section 4), network requests may be routed through servers located outside your country of residence, including servers in the United States. The anonymous event counters described in Section 3 are received by Cloudflare's globally distributed edge network and stored, as anonymous aggregates only, in a Cloudflare D1 database; because they contain no personal data, data-transfer restrictions do not apply to them.</p>
@@ -140,7 +141,7 @@
   <li><strong>Right to erasure</strong> (Art. 17) — You may delete all data by clearing app data or uninstalling (see Section 7).</li>
   <li><strong>Right to restriction of processing</strong> (Art. 18) — You may restrict processing by revoking permissions in Android settings.</li>
   <li><strong>Right to data portability</strong> (Art. 20) — As all data is stored locally in standard Android SharedPreferences, it is inherently portable.</li>
-  <li><strong>Right to object</strong> (Art. 21) — You may object to processing based on legitimate interest (sanctions screening) by denying the location permission.</li>
+  <li><strong>Right to object</strong> (Art. 21) — You may object to processing based on legitimate interest (sanctions screening) by contacting us; note that the screening described in Section 2.2 is a legal requirement and cannot be disabled within the app.</li>
   <li><strong>Right to withdraw consent</strong> (Art. 7(3)) — You may withdraw wallet-related consent at any time by disconnecting your wallet.</li>
   <li><strong>Right to lodge a complaint</strong> — You may lodge a complaint with your local supervisory authority.</li>
 </ul>
@@ -161,7 +162,7 @@
   <li><strong>Right to opt-out of sale:</strong> <strong>We do not sell, share, or rent any personal information to any third party.</strong></li>
   <li><strong>Right to non-discrimination:</strong> We will not discriminate against you for exercising your privacy rights</li>
   <li><strong>Right to correct:</strong> Correct inaccurate personal information via app settings</li>
-  <li><strong>Right to limit use of sensitive personal information:</strong> We do not process sensitive personal information beyond the coarse location check described in Section 2.2</li>
+  <li><strong>Right to limit use of sensitive personal information:</strong> We do not process sensitive personal information, and we do not collect geolocation data</li>
 </ul>
 
 <h3>9.4 Japan (Act on Protection of Personal Information — APPI)</h3>
@@ -192,7 +193,7 @@
   <li>We do not engage in large-scale processing of personal data</li>
   <li>We do not systematically monitor public areas</li>
   <li>We do not process special categories of data</li>
-  <li>Location data is processed on-device only and never stored or transmitted</li>
+  <li>We do not collect location data; region screening reads carrier/timezone values on-device only and never stores or transmits them</li>
   <li>Usage measurement is limited to anonymous, aggregate event counts with no identifiers (Section 3)</li>
 </ul>
 
