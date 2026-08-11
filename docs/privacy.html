@@ -12,7 +12,7 @@
 <a class="back" href="index.html">← Back to Legal</a>
 
 <h1>Privacy Policy</h1>
-<span class="updated">Effective date: 13 February 2025 · Last updated: 7 August 2026 · Version 1.2</span>
+<span class="updated">Effective date: 13 February 2025 · Last updated: 12 August 2026 · Version 1.3</span>
 
 <div class="callout">
   <strong>Summary:</strong> Sol Clock stores all personal data locally on your device. We do not collect personal information or track your behaviour. The only network requests are read-only API calls to fetch publicly available price and blockchain data, plus <strong>anonymous, aggregate usage counters</strong> (e.g. "the app was opened") that contain no identifiers of any kind and cannot be linked to you or your device — see Section 3. You can verify everything we hold at our <a href="https://sol-clock-analytics.aardappvark.workers.dev/public-stats" rel="noopener noreferrer">public transparency endpoint</a>.
@@ -69,7 +69,8 @@
 <p>Sol Clock does <strong>not</strong> operate any backend servers, databases, or cloud storage that hold personal data. All personal data exists exclusively in your device's app-private storage and is inaccessible to other applications.</p>
 <p>The single server-side system we operate is an <strong>anonymous, aggregate usage counter</strong> (a Cloudflare Worker). It works as follows:</p>
 <ul>
-  <li><strong>What the app sends:</strong> a single event name from a fixed list, and nothing else. The complete list of events is: app opened, wallet connected, wallet disconnected, settings opened, region-block screen shown, home-screen widget added, home-screen widget removed, and screensaver started.</li>
+  <li><strong>What the app sends:</strong> a single event name from a fixed list, and nothing else. The complete list of events is: app opened, wallet connected, wallet disconnected, settings opened, region-block screen shown, price widget added, price widget removed, clock widget added, clock widget removed, screensaver started, screensaver suggestion shown, screensaver suggestion tapped, nightstand mode turned on, clock face changed, accent colour changed, Pro screen opened, Pro payment started (SOL), Pro payment started (SKR), Pro payment completed (SOL), Pro payment completed (SKR), Pro payment failed, purchase restore started, purchase restore completed, and Seeker Genesis Token verified.</li>
+<li><strong>Purchases are counted, never described:</strong> the payment events above are bare event names. No wallet address, transaction signature, amount, or timestamp beyond the calendar day is sent to or held by us. Your payment itself is a public Solana transaction; nothing we store adds to what the blockchain already shows.</li>
   <li><strong>No identifiers:</strong> the request contains no user ID, device ID, wallet address, advertising ID, fingerprint, or any other identifier. Two events from the same device cannot be linked to each other.</li>
   <li><strong>Approximate geography:</strong> Cloudflare's edge network derives the country, region (state/province), and city associated with the request's IP address. Our code reads only that derived country/region/city — the IP address itself is <strong>never logged, stored, or processed</strong> by our code, and your device's location services are not involved.</li>
   <li><strong>What is stored:</strong> only aggregate counts of the form "event × country × region × city × day" (e.g. "app_open, HU, Budapest, Budapest, 2026-07-23: 41"). Nothing per-user or per-device exists anywhere in the system.</li>
